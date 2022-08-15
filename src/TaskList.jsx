@@ -1,6 +1,7 @@
 import Task from "./Task";
 
-const TaskList = ({tasks, handleDelete, updatedTask}) => {
+const TaskList = ({tasks, handleDelete, handleUpdate}) => {
+
     return (
         <div>
             <h1>Tasks</h1>
@@ -9,7 +10,7 @@ const TaskList = ({tasks, handleDelete, updatedTask}) => {
                     key={task.id} 
                     task={task} 
                     handleDelete={handleDelete}
-                    updatedTask={updatedTask}
+                    handleUpdate={handleUpdate}
                 />)
             }
         </div>

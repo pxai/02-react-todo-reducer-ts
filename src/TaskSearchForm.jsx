@@ -6,6 +6,11 @@ const TaskSearchForm = ({handleSearch}) => {
         handleSearch(taskValue);
     };
 
+    const onReset = () => {
+        setTaskValue('');
+        handleSearch('');
+    };
+
     const handleSave = (e) => {
         setTaskValue(e.target.value);
     };
@@ -14,6 +19,7 @@ const TaskSearchForm = ({handleSearch}) => {
         <div>
             <input type="text" value={taskValue} onChange={handleSave} />
             <button onClick={onSearch}>Search for task</button>
+            <button onClick={onReset}>Clear</button>
         </div>
     );
 };
