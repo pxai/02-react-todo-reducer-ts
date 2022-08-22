@@ -1,53 +1,42 @@
-import { useState, useCallback, useMemo, useEffect, useContext } from 'react';
+import { useState, useCallback, useMemo, useEffect, useReducer } from 'react';
 import TaskList from './TaskList';
 import TaskForm from './TaskForm';
 import TaskSearchForm from './TaskSearchForm';
-import initialTasks from './initialTasks';
 import './App.css';
-import { TaskContext } from './context/task.context';
+import { createAction } from './utils/reducer/reducer.utils';
+import { TASKS_ACTION_TYPES, initialTaskState, taskReducer } from './reducers/task.reducer';
 
 
 function App() {
-  const {
-    tasks,
-    addTask,
-    updateTask,
-    removeTask,
-    searchTasks,
-    filteredTasks,
-  } = useContext(TaskContext);
+  const [state, dispatch] = useReducer(taskReducer, initialTaskState);
 
   const [searchTerm, setSearchTerm] = useState('');
 
   const printTaskList = useCallback(() => {
-    console.log("Changed List: ", tasks)
-  }, [tasks]);
+    console.log("Changed List: ", state.tasks)
+  }, [state.tasks]);
 
-  useEffect(()=> {
-    initialTasks.forEach(task => addTask(task));
-  }, [])
+  const handleDelete =(id) => {
+    dispatch(createAction(TASKS_ACTION_TYPES.REMOVE_TASK, id));
+  };
 
-  const handleDelete = useCallback((id) => {
-    removeTask(id)
-  }, [removeTask]);
+  const handleUpdate = (updatedTask)=> {
+    dispatch(createAction(TASKS_ACTION_TYPES.UPDATE_TASK, updatedTask))
+  };
 
-  const handleUpdate = useCallback((updatedTask)=> {
-    updateTask(updatedTask);
-  }, [updateTask]);
-
-  const handleCreate = useCallback((name) => {
-    addTask({id: Math.round(10000 * Math.random()), name});
-  }, [addTask]);
+  const handleCreate = (name) => {
+    dispatch(createAction(TASKS_ACTION_TYPES.ADD_TASK, {id: Math.round(10000 * Math.random()), name}))
+  };
 
   const handleSearch = (name) => {
-    setSearchTerm(name);
+    dispatch(createAction(TASKS_ACTION_TYPES.SEARCH_TASK, name))
   };
 
   const filteredTaskList = useMemo( () => {
-    return tasks.filter((task) => {
-      return task.name.toLowerCase().includes(searchTerm.toLowerCase());
+    return state.tasks.filter((task) => {
+      return task.name.toLowerCase().includes(state.searchTerm.toLowerCase());
     })
-  }, [searchTerm, tasks]);
+  }, [searchTerm, state.tasks]);
 
   /*
   () => tasks.filter((task) => {
