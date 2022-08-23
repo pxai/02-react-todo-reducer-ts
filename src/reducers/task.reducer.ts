@@ -1,7 +1,6 @@
-import { createContext, useState } from 'react';
 import tasks from '../initialTasks';
 import Task from '../types/task';
-import Action from '../types/action';
+import { TASK_ACTIONS_TYPES, Action } from '../types/action';
 
 const addTaskToTasks = (tasks: Task[], taskToAdd: Task) => {
   return [...tasks, taskToAdd];  
@@ -17,33 +16,25 @@ const updateTaskFromTasks = (tasks: Task[], taskToUpdate: Task) => {
     return [...filteredTasks, taskToUpdate];
 }
 
-export const TASKS_ACTION_TYPES = {
-    ADD_TASK: 'ADD_TASK',
-    REMOVE_TASK: 'REMOVE_TASK',
-    UPDATE_TASK: 'UPDATE_TASK',
-    CREATE_TASK: 'CREATE_TASK',
-    SEARCH_TASK: 'SEARCH_TASK',
-};
-
-export type taskState = {
+export type TaskState = {
     taskTotal: number;
     isTasksEmpty: boolean;
     tasks: Task[];
     searchTerm: string;
 }
 
-export const initialTaskState: taskState = {
+export const initialTaskState: TaskState = {
     taskTotal: 0,
     isTasksEmpty: true,
     tasks,
     searchTerm: '',
 }
 
-export const taskReducer = (state: taskState, action: Action) => {
+export const taskReducer = (state: TaskState, action: Action) => {
     const {type, payload} = action;
     let changedTasks = null;
     switch (type) {
-        case TASKS_ACTION_TYPES.ADD_TASK:
+        case TASK_ACTIONS_TYPES.ADD_TASK:
                 changedTasks = addTaskToTasks(state.tasks, payload as Task);
                 return {
                     ...state,
@@ -51,7 +42,7 @@ export const taskReducer = (state: taskState, action: Action) => {
                     isTasksEmpty: changedTasks.length > 0,
                     tasks: changedTasks,
                 };
-        case TASKS_ACTION_TYPES.UPDATE_TASK:
+        case TASK_ACTIONS_TYPES.UPDATE_TASK:
             changedTasks = updateTaskFromTasks(state.tasks, payload as Task);
             return {
                 ...state,
@@ -59,7 +50,7 @@ export const taskReducer = (state: taskState, action: Action) => {
                 isTasksEmpty: changedTasks.length > 0,
                 tasks: changedTasks
             };
-        case TASKS_ACTION_TYPES.REMOVE_TASK:
+        case TASK_ACTIONS_TYPES.REMOVE_TASK:
             changedTasks = removeTaskFromTasks(state.tasks, payload as number);
             return {
                 ...state,
@@ -67,10 +58,10 @@ export const taskReducer = (state: taskState, action: Action) => {
                 isTasksEmpty: changedTasks.length > 0,
                 tasks: changedTasks
             };
-        case TASKS_ACTION_TYPES.SEARCH_TASK:
+        case TASK_ACTIONS_TYPES.SEARCH_TASK:
             return {
                 ...state,
-                searchTerm: payload,
+                searchTerm: payload as string,
             };
         default:
             throw new Error(`Unhandled action for reducer: ${type}`)

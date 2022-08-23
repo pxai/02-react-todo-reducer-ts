@@ -1,5 +1,4 @@
 import { useState, ChangeEvent } from "react";
-import Task from './types/task';
 
 type TaskFormProps = {
     handleCreate: (name: string) => void;

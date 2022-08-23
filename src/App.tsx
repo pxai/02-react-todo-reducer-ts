@@ -1,42 +1,41 @@
-import React, { useState, useCallback, useMemo, useEffect, useReducer } from 'react';
+import React, { useCallback, useMemo, useReducer, Reducer } from 'react';
 import TaskList from './TaskList';
 import TaskForm from './TaskForm';
 import TaskSearchForm from './TaskSearchForm';
 import './App.css';
 import createAction from './utils/reducer/reducer.utils';
-import { TASKS_ACTION_TYPES, initialTaskState, taskState, taskReducer } from './reducers/task.reducer';
+import { initialTaskState, TaskState, taskReducer } from './reducers/task.reducer';
 import Task from './types/task'; 
+import { TASK_ACTIONS_TYPES, Action } from './types/action';
 
 function App() {
-  const [state, dispatch] = useReducer(taskReducer, initialTaskState);
+  const [state, dispatch] = useReducer<Reducer<TaskState, Action>>(taskReducer, initialTaskState);
 
-  const [searchTerm, setSearchTerm] = useState<string>('');
-
-  const printTaskList = useCallback(() => {
+  useCallback(() => {
     console.log("Changed List: ", state.tasks)
   }, [state.tasks]);
 
   const handleDelete =(id: number) => {
-    dispatch(createAction(TASKS_ACTION_TYPES.REMOVE_TASK, id));
+    dispatch(createAction(TASK_ACTIONS_TYPES.REMOVE_TASK, id));
   };
 
   const handleUpdate = (updatedTask: Task)=> {
-    dispatch(createAction(TASKS_ACTION_TYPES.UPDATE_TASK, updatedTask))
+    dispatch(createAction(TASK_ACTIONS_TYPES.UPDATE_TASK, updatedTask))
   };
 
   const handleCreate = (name: string) => {
-    dispatch(createAction(TASKS_ACTION_TYPES.ADD_TASK, {id: Math.round(10000 * Math.random()), name}))
+    dispatch(createAction(TASK_ACTIONS_TYPES.ADD_TASK, {id: Math.round(10000 * Math.random()), name}))
   };
 
   const handleSearch = (name: string) => {
-    dispatch(createAction(TASKS_ACTION_TYPES.SEARCH_TASK, name))
+    dispatch(createAction(TASK_ACTIONS_TYPES.SEARCH_TASK, name))
   };
 
   const filteredTaskList = useMemo( () => {
     return state.tasks.filter((task: Task) => {
       return task.name.toLowerCase().includes(state.searchTerm.toLowerCase());
     })
-  }, [searchTerm, state.tasks]);
+  }, [state.searchTerm, state.tasks]);
 
   return (
     <div className="App">

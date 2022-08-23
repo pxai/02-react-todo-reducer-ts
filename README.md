@@ -2,7 +2,6 @@
 Simple TODO app using functional components and basic reducer hook
 
 [![Build Status](https://app.travis-ci.com/pxai/02-react-todo-reducer-ts.svg?branch=master)](https://app.travis-ci.com/pxai/02-react-todo-reducer-ts)
-
 # Add TS support
 ```shell
 yarn add typescript @types/node @types/react @types/react-dom @types/jest
