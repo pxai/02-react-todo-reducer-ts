@@ -1,14 +1,21 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from 'react';
+import Task from './types/task';
 
-const Task = ({task, handleDelete, handleUpdate}) => {
-    const [edit, setEdit] = useState(false);
-    const [taskValue, setTaskValue] = useState(task.name);
+type TaskComponentProps = {
+    task: Task;
+    handleDelete: (id: number) => void;
+    handleUpdate: (task: Task) => void;
+}
+
+const TaskComponent = ({task, handleDelete, handleUpdate}: TaskComponentProps) => {
+    const [edit, setEdit] = useState<boolean>(false);
+    const [taskValue, setTaskValue] = useState<string>(task.name);
 
     const handleEdit = () => {
         setEdit(true);
     };
 
-    const setTask = (event) => {
+    const setTask = (event: ChangeEvent<HTMLInputElement>) => {
         setTaskValue(event.target.value);
     };
 
@@ -36,4 +43,4 @@ const Task = ({task, handleDelete, handleUpdate}) => {
     )
 };
 
-export default Task;
+export default TaskComponent;

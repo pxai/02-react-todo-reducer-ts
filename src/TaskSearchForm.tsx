@@ -1,6 +1,11 @@
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
+import Task from './types/task';
 
-const TaskSearchForm = ({handleSearch}) => {
+type TaskSearchFormProps = {
+    handleSearch: (name: string) => void;
+};
+
+const TaskSearchForm = ({handleSearch}: TaskSearchFormProps) => {
     const [taskValue, setTaskValue] = useState('');
     const onSearch = () => {
         handleSearch(taskValue);
@@ -11,8 +16,8 @@ const TaskSearchForm = ({handleSearch}) => {
         handleSearch('');
     };
 
-    const handleSave = (e) => {
-        setTaskValue(e.target.value);
+    const handleSave = (event: ChangeEvent<HTMLInputElement>) => {
+        setTaskValue(event.target.value);
     };
 
     return (

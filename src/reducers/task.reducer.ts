@@ -1,15 +1,17 @@
 import { createContext, useState } from 'react';
 import tasks from '../initialTasks';
+import Task from '../types/task';
+import Action from '../types/action';
 
-const addTaskToTasks = (tasks, taskToAdd) => {
+const addTaskToTasks = (tasks: Task[], taskToAdd: Task) => {
   return [...tasks, taskToAdd];  
 };
 
-const removeTaskFromTasks = (tasks, idToRemove) => {
+const removeTaskFromTasks = (tasks: Task[], idToRemove: number) => {
     return tasks.filter( task => task.id !== idToRemove)
 };
 
-const updateTaskFromTasks = (tasks, taskToUpdate) => {
+const updateTaskFromTasks = (tasks: Task[], taskToUpdate: Task) => {
     const filteredTasks = tasks.filter( task => task.id !== taskToUpdate.id);
 
     return [...filteredTasks, taskToUpdate];
@@ -23,19 +25,26 @@ export const TASKS_ACTION_TYPES = {
     SEARCH_TASK: 'SEARCH_TASK',
 };
 
-export const initialTaskState = {
+export type taskState = {
+    taskTotal: number;
+    isTasksEmpty: boolean;
+    tasks: Task[];
+    searchTerm: string;
+}
+
+export const initialTaskState: taskState = {
     taskTotal: 0,
     isTasksEmpty: true,
     tasks,
     searchTerm: '',
 }
 
-export const taskReducer = (state, action) => {
+export const taskReducer = (state: taskState, action: Action) => {
     const {type, payload} = action;
     let changedTasks = null;
     switch (type) {
         case TASKS_ACTION_TYPES.ADD_TASK:
-                changedTasks = addTaskToTasks(state.tasks, payload);
+                changedTasks = addTaskToTasks(state.tasks, payload as Task);
                 return {
                     ...state,
                     taskTotal: changedTasks.length,
@@ -43,7 +52,7 @@ export const taskReducer = (state, action) => {
                     tasks: changedTasks,
                 };
         case TASKS_ACTION_TYPES.UPDATE_TASK:
-            changedTasks = updateTaskFromTasks(state.tasks, payload);
+            changedTasks = updateTaskFromTasks(state.tasks, payload as Task);
             return {
                 ...state,
                 taskTotal: changedTasks.length,
@@ -51,7 +60,7 @@ export const taskReducer = (state, action) => {
                 tasks: changedTasks
             };
         case TASKS_ACTION_TYPES.REMOVE_TASK:
-            changedTasks = removeTaskFromTasks(state.tasks, payload);
+            changedTasks = removeTaskFromTasks(state.tasks, payload as number);
             return {
                 ...state,
                 taskTotal: changedTasks.length,
